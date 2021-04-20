@@ -1,2 +1,2 @@
-project_id = "REPLACE_ME"
-region     = "us-central1"
+project_id = "alevz-project-1-310308"
+region     = "asia-southeast2"
