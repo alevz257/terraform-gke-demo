@@ -23,13 +23,12 @@ resource "google_compute_subnetwork" "subnet" {
   region        = var.region
   network       = google_compute_network.vpc.name
   ip_cidr_range = "10.10.0.0/24"
-#  secondary_ip_range {
-#      range_name    = "pod"
-#      ip_cidr_range = "10.11.0.0/20"
+#  secondary_ip_range{
+#    range_name    = "pod"
+#    ip_cidr_range = "10.11.0.0/20"
 #  }
-#  secondary_ip_range {
-#      range_name    = "svc"
-#      ip_cidr_range = "10.12.0.0/23"
+#  secondary_ip_range{
+#    range_name    = "svc"
+#    ip_cidr_range = "10.12.0.0/23"
 #  }
-
 }
