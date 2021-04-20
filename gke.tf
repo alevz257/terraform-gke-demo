@@ -24,6 +24,24 @@ resource "google_container_cluster" "primary" {
   network    = google_compute_network.vpc.name
   subnetwork = google_compute_subnetwork.subnet.name
 
+  private_cluster_config {
+    enable_private_endpoint = "false"
+    enable_private_nodes = "true"
+    master_ipv4_cidr_block = "10.100.0.0/28"
+  }
+
+  master_authorized_networks_config {
+      cidr_blocks {
+          cidr_block   = "0.0.0.0/0"
+          display_name = "all-for-testing"
+      }
+  }
+
+  ip_allocation_policy {
+    cluster_ipv4_cidr_block = "10.11.0.0/20"
+    services_ipv4_cidr_block = "10.12.0.0/23"
+  }
+
 #  master_auth {
 #    username = var.gke_username
 #    password = var.gke_password
