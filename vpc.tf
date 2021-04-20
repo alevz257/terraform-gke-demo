@@ -26,6 +26,8 @@ resource "google_compute_subnetwork" "subnet" {
   secondary_ip_range {
       range_name    = "pod"
       ip_cidr_range = "10.20.0.0/23"
+  }
+  secondary_ip_range {
       range_name    = "svc"
       ip_cidr_range = "10.30.0.0/23"
   }
