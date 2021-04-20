@@ -23,6 +23,10 @@ steps:
   - '-c'
   - | 
       terraform plan
+  env:
+    - "TF_VAR_project_id=${PROJECT_ID}"
+    - "TF_VAR_region='asia-southeast2'"
+    - 'TF_VAR_branch=${BRANCH_NAME}"
 # [END tf-plan]
 
 # [START tf-apply]
@@ -33,4 +37,8 @@ steps:
   - '-c'
   - | 
         terraform apply -auto-approve
+  env:
+    - "TF_VAR_project_id=${PROJECT_ID}"
+    - "TF_VAR_region='asia-southeast2'"
+    - 'TF_VAR_branch=${BRANCH_NAME}"
 # [END tf-apply]    

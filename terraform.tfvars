@@ -1,2 +1,2 @@
-project_id = "alevz-project-1-310308"
-region     = "asia-southeast2"
+#project_id = "alevz-project-1-310308"
+#region     = "asia-southeast2"
