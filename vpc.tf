@@ -1,9 +1,9 @@
 variable "project_id" {
-  description = "alevz-project-1-310308"
+  description = "project_id"
 }
 
 variable "region" {
-  description = "asia-southeast2"
+  description = "region"
 }
 
 provider "google" {
