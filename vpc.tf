@@ -41,7 +41,7 @@ resource "google_compute_subnetwork" "subnet" {
 resource "google_compute_router" "router" {
   name    = "nat-router"
   region  = google_compute_subnetwork.subnet.region
-  network = google_compute_subnetwork.subnet.network
+  network = google_compute_subnetwork.vpc.id
 
   bgp {
     asn = 64514
