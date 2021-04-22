@@ -7,7 +7,7 @@ terraform {
   }
   
   backend "gcs" {
-      bucket = "alev-tf-state"
+      bucket = "alevz-demo-tf-1"
       prefix = "terraform/state"
   }
 
