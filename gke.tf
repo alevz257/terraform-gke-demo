@@ -17,7 +17,9 @@ variable "gke_num_nodes" {
 resource "google_container_cluster" "primary" {
   name     = "${var.project_id}-gke"
   location = var.zone
-
+  
+  provider = google-beta
+  
   remove_default_node_pool = true
   initial_node_count       = 1
 
@@ -41,6 +43,14 @@ resource "google_container_cluster" "primary" {
     cluster_ipv4_cidr_block = "10.11.0.0/20"
     services_ipv4_cidr_block = "10.12.0.0/23"
   }
+
+  addons_config {
+    istio_config {
+      disabled  = false
+      auth      = "AUTH_MUTUAL_TLS"
+    }
+  }
+
 
 #  master_auth {
 #    username = var.gke_username
@@ -79,6 +89,35 @@ resource "google_container_node_pool" "primary_nodes" {
   }
 }
 
+#GKE Autopilot
+resource "google_container_cluster" "autopilot" {
+  name          = "${var.project_id}-gke-autopilot"
+  location      = var.region
+  enable_autopilot = "true"
+
+  network       = google_compute_network.vpc.name
+  subnetwork    = google_compute_subnetwork.subnet.name
+  
+  private_cluster_config {
+    enable_private_endpoint = "false"
+    enable_private_nodes    = "true"
+    master_ipv4_cidr_block  = "10.101.0.0/28"
+  }
+
+  master_authorized_networks_config {
+    cidr_blocks {
+      cidr_block    = "0.0.0.0/0"
+      display_name  = "all-for-testing"
+    }
+  }
+
+  ip_allocation_policy {
+    cluster_ipv4_cidr_block   = "10.13.0.0/20"
+    services_ipv4_cidr_block  = "10.14.0.0/23"
+  }
+}
+
+
 
 # # Kubernetes provider
 # # The Terraform Kubernetes Provider configuration below is used as a learning reference only. 
@@ -98,4 +137,3 @@ resource "google_container_node_pool" "primary_nodes" {
 #   client_key             = google_container_cluster.primary.master_auth.0.client_key
 #   cluster_ca_certificate = google_container_cluster.primary.master_auth.0.cluster_ca_certificate
 # }
-
