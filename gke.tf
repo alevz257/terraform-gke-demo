@@ -45,13 +45,13 @@ resource "google_container_cluster" "primary" {
     services_ipv4_cidr_block = "10.12.0.0/23"
   }
 
+
   addons_config {
     istio_config {
       disabled  = false
       auth      = "AUTH_MUTUAL_TLS"
     }
   }
-
 
 #  master_auth {
 #    username = var.gke_username
