@@ -51,8 +51,6 @@ resource "google_container_cluster" "primary" {
       auth      = "AUTH_MUTUAL_TLS"
     }
   }
-
-
 #  master_auth {
 #    username = var.gke_username
 #    password = var.gke_password
