@@ -35,6 +35,7 @@ resource "google_compute_subnetwork" "subnet" {
 #    range_name    = "svc"
 #    ip_cidr_range = "10.12.0.0/23"
 #  }
+}
 
 #router
 resource "google_compute_router" "router" {
