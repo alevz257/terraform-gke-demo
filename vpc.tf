@@ -36,8 +36,6 @@ resource "google_compute_subnetwork" "subnet" {
 #    ip_cidr_range = "10.12.0.0/23"
 #  }
 
-}
-
 #router
 resource "google_compute_router" "router" {
   name    = "nat-router"
@@ -61,4 +59,5 @@ resource "google_compute_router_nat" "nat" {
     enable = true
     filter = "ERRORS_ONLY"
   }
+
 }
