@@ -9,14 +9,17 @@ variable "gke_password" {
 }
 
 variable "gke_num_nodes" {
-  default     = 1
+  default     = 3
   description = "number of gke nodes"
 }
 
 # GKE cluster
 resource "google_container_cluster" "primary" {
   name     = "${var.project_id}-gke"
-  location = var.region
+  location = var.zone
+  project  = var.project_id
+
+  provider = google-beta
 
   remove_default_node_pool = true
   initial_node_count       = 1
@@ -42,6 +45,12 @@ resource "google_container_cluster" "primary" {
     services_ipv4_cidr_block = "10.12.0.0/23"
   }
 
+  addons_config {
+    istio_config {
+      disabled  = false
+      auth      = "AUTH_MUTUAL_TLS"
+    }
+  }
 #  master_auth {
 #    username = var.gke_username
 #    password = var.gke_password
@@ -55,7 +64,7 @@ resource "google_container_cluster" "primary" {
 # Separately Managed Node Pool
 resource "google_container_node_pool" "primary_nodes" {
   name       = "${google_container_cluster.primary.name}-node-pool"
-  location   = var.region
+  location   = var.zone
   cluster    = google_container_cluster.primary.name
   node_count = var.gke_num_nodes
 
@@ -71,13 +80,43 @@ resource "google_container_node_pool" "primary_nodes" {
     }
 
     # preemptible  = true
-    machine_type = "n1-standard-1"
+    machine_type = "n1-standard-4"
     tags         = ["gke-node", "${var.project_id}-gke"]
     metadata = {
       disable-legacy-endpoints = "true"
     }
   }
 }
+
+#GKE Autopilot
+resource "google_container_cluster" "autopilot" {
+  name          = "${var.project_id}-gke-autopilot"
+  location      = var.region
+  enable_autopilot = "true"
+  project       = var.project_id
+
+  network       = google_compute_network.vpc.name
+  subnetwork    = google_compute_subnetwork.subnet.name
+  
+  private_cluster_config {
+    enable_private_endpoint = "false"
+    enable_private_nodes    = "true"
+    master_ipv4_cidr_block  = "10.101.0.0/28"
+  }
+
+  master_authorized_networks_config {
+    cidr_blocks {
+      cidr_block    = "0.0.0.0/0"
+      display_name  = "all-for-testing"
+    }
+  }
+
+  ip_allocation_policy {
+    cluster_ipv4_cidr_block   = "10.13.0.0/20"
+    services_ipv4_cidr_block  = "10.14.0.0/23"
+  }
+}
+
 
 
 # # Kubernetes provider
@@ -98,4 +137,3 @@ resource "google_container_node_pool" "primary_nodes" {
 #   client_key             = google_container_cluster.primary.master_auth.0.client_key
 #   cluster_ca_certificate = google_container_cluster.primary.master_auth.0.cluster_ca_certificate
 # }
-

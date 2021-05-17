@@ -1,2 +1,3 @@
-project_id = "alevz-project-1-310308"
+project_id = "alevz-demo-1"
 region     = "asia-southeast2"
+zone       = "asia-southeast2-a"
