@@ -41,8 +41,8 @@ resource "google_container_cluster" "primary" {
   }
 
   ip_allocation_policy {
-    cluster_ipv4_cidr_block = "10.11.0.0/20"
-    services_ipv4_cidr_block = "10.12.0.0/23"
+    cluster_ipv4_cidr_block = "10.1.0.0/20"
+    services_ipv4_cidr_block = "10.2.0.0/23"
   }
 
 
@@ -90,34 +90,34 @@ resource "google_container_node_pool" "primary_nodes" {
   }
 }
 
-#GKE Autopilot
-resource "google_container_cluster" "autopilot" {
-  name          = "${var.project_id}-gke-autopilot"
-  location      = var.region
-  enable_autopilot = "true"
-  project       = var.project_id
-
-  network       = google_compute_network.vpc.name
-  subnetwork    = google_compute_subnetwork.subnet.name
-  
-  private_cluster_config {
-    enable_private_endpoint = "false"
-    enable_private_nodes    = "true"
-    master_ipv4_cidr_block  = "10.101.0.0/28"
-  }
-
-  master_authorized_networks_config {
-    cidr_blocks {
-      cidr_block    = "0.0.0.0/0"
-      display_name  = "all-for-testing"
-    }
-  }
-
-  ip_allocation_policy {
-    cluster_ipv4_cidr_block   = "10.13.0.0/20"
-    services_ipv4_cidr_block  = "10.14.0.0/23"
-  }
-}
+##GKE Autopilot
+#resource "google_container_cluster" "autopilot" {
+#  name          = "${var.project_id}-gke-autopilot"
+#  location      = var.region
+#  enable_autopilot = "true"
+#  project       = var.project_id
+#
+#  network       = google_compute_network.vpc.name
+#  subnetwork    = google_compute_subnetwork.subnet.name
+#  
+#  private_cluster_config {
+#    enable_private_endpoint = "false"
+#    enable_private_nodes    = "true"
+#    master_ipv4_cidr_block  = "10.101.0.0/28"
+#  }
+#
+#  master_authorized_networks_config {
+#    cidr_blocks {
+#      cidr_block    = "0.0.0.0/0"
+#      display_name  = "all-for-testing"
+#    }
+#  }
+#
+#  ip_allocation_policy {
+#    cluster_ipv4_cidr_block   = "10.13.0.0/20"
+#    services_ipv4_cidr_block  = "10.14.0.0/23"
+#  }
+#}
 
 
 
